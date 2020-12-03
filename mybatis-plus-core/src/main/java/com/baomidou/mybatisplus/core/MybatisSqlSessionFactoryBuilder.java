@@ -95,6 +95,7 @@ public class MybatisSqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
         //TODO 这里只是为了兼容下,并没多大重要,方法标记过时了.
         IdWorker.setIdentifierGenerator(identifierGenerator);
 
+        // 注入器
         if (globalConfig.isEnableSqlRunner()) {
             new SqlRunnerInjector().inject(configuration);
         }

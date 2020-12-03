@@ -71,12 +71,16 @@ public class MybatisPlusInterceptor implements Interceptor {
                     boundSql = (BoundSql) args[5];
                 }
                 for (InnerInterceptor query : interceptors) {
+                    // 查询 count 如果为 0 就返回 false，直接返回 emptyList
                     if (!query.willDoQuery(executor, ms, parameter, rowBounds, resultHandler, boundSql)) {
                         return Collections.emptyList();
                     }
+                    // 查询数据
                     query.beforeQuery(executor, ms, parameter, rowBounds, resultHandler, boundSql);
                 }
+                // 生产 cache key(和MyBaits一样)
                 CacheKey cacheKey = executor.createCacheKey(ms, parameter, rowBounds, boundSql);
+                // 调用执行器，执行
                 return executor.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
             } else if (isUpdate) {
                 for (InnerInterceptor update : interceptors) {

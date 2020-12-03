@@ -82,6 +82,7 @@ public class MybatisMapperMethod {
                     result = executeForCursor(sqlSession, args);
                 } else {
                     Object param = method.convertArgsToSqlCommandParam(args);
+                    // tip: 这里拦截了 IPage 返回值，然后进行分页
                     // TODO 这里下面改了
                     if (IPage.class.isAssignableFrom(method.getReturnType())) {
                         result = executeForIPage(sqlSession, args);
@@ -110,6 +111,7 @@ public class MybatisMapperMethod {
 
     @SuppressWarnings("all")
     private <E> Object executeForIPage(SqlSession sqlSession, Object[] args) {
+        // 找到 page
         IPage<E> result = null;
         for (Object arg : args) {
             if (arg instanceof IPage) {
@@ -119,6 +121,7 @@ public class MybatisMapperMethod {
         }
         Assert.notNull(result, "can't found IPage for args!");
         Object param = method.convertArgsToSqlCommandParam(args);
+        // 调用 SqlSession 查询
         List<E> list = sqlSession.selectList(command.getName(), param);
         if (list instanceof PageList) {
             PageList<E> pageList = (PageList<E>) list;
@@ -127,6 +130,7 @@ public class MybatisMapperMethod {
         } else {
             result.setRecords(list);
         }
+        // 查询完了，就返回
         return result;
     }
 

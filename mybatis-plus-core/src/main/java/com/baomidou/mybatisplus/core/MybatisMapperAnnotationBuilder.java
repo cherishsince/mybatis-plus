@@ -120,6 +120,7 @@ public class MybatisMapperAnnotationBuilder extends MapperAnnotationBuilder {
             try {
                 // https://github.com/baomidou/mybatis-plus/issues/3038
                 if (GlobalConfigUtils.isSupperMapperChildren(configuration, type)) {
+                    // 从 GlobalConfig 获取配置的注入器，然后注入
                     parserInjector();
                 }
             } catch (IncompleteElementException e) {

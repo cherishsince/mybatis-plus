@@ -48,6 +48,7 @@ public abstract class AbstractSqlInjector implements ISqlInjector {
             String className = mapperClass.toString();
             Set<String> mapperRegistryCache = GlobalConfigUtils.getMapperRegistryCache(builderAssistant.getConfiguration());
             if (!mapperRegistryCache.contains(className)) {
+                // 获取注入的方法
                 List<AbstractMethod> methodList = this.getMethodList(mapperClass);
                 if (CollectionUtils.isNotEmpty(methodList)) {
                     TableInfo tableInfo = TableInfoHelper.initTableInfo(builderAssistant, modelClass);
